@@ -1,5 +1,7 @@
 import { useTasks } from "../hooks/useTasks";
+import { useDeleteTask } from "../hooks/useDeleteTask";
 import { TaskItem } from "./TaskItem";
+import { AddTaskForm } from "./AddTaskForm";
 import { useSyncStore } from "../../../stores/sync.store";
 
 interface TaskListProps {
@@ -8,6 +10,7 @@ interface TaskListProps {
 
 export function TaskList({ listId }: TaskListProps) {
   const { data: tasks, isLoading, error } = useTasks(listId);
+  const deleteMutation = useDeleteTask(listId);
   const flaggedEmailsListId = useSyncStore((s) => s.flaggedEmailsListId);
   const isFromFlaggedEmails = listId === flaggedEmailsListId;
 
@@ -30,23 +33,32 @@ export function TaskList({ listId }: TaskListProps) {
     );
   }
 
-  if (!tasks || tasks.length === 0) {
-    return (
-      <div className="p-4 text-center">
-        <p className="text-sm text-muted-foreground">No tasks in this list</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-1 p-2">
-      {tasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          isFromFlaggedEmails={isFromFlaggedEmails}
-        />
-      ))}
+    <div className="flex flex-col h-full">
+      {/* Add task form at the top */}
+      <div className="border-b">
+        <AddTaskForm listId={listId} />
+      </div>
+
+      {/* Task list */}
+      <div className="flex-1 overflow-auto">
+        {!tasks || tasks.length === 0 ? (
+          <div className="p-4 text-center">
+            <p className="text-sm text-muted-foreground">No tasks in this list</p>
+          </div>
+        ) : (
+          <div className="space-y-1 p-2">
+            {tasks.map((task) => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                isFromFlaggedEmails={isFromFlaggedEmails}
+                onDelete={(taskId) => deleteMutation.mutate(taskId)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
