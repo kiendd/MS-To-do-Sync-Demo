@@ -1,17 +1,36 @@
 import { AuthGuard, LoginButton } from "./features/auth";
+import { TaskListSidebar } from "./features/task-lists";
+import { useSyncStore } from "./stores/sync.store";
+
+function AppContent() {
+  const selectedListId = useSyncStore((s) => s.selectedListId);
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <header className="border-b px-4 py-3 flex items-center justify-between shrink-0">
+        <h1 className="text-xl font-semibold">MS To-do Sync</h1>
+        <LoginButton />
+      </header>
+      <div className="flex flex-1 overflow-hidden">
+        <TaskListSidebar />
+        <main className="flex-1 p-4 overflow-auto">
+          {selectedListId ? (
+            <p className="text-muted-foreground">
+              Tasks for list {selectedListId} will be displayed here (Plan 02-02).
+            </p>
+          ) : (
+            <p className="text-muted-foreground">Select a list to view tasks.</p>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
     <AuthGuard>
-      <div className="min-h-screen">
-        <header className="border-b px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl font-semibold">MS To-do Sync</h1>
-          <LoginButton />
-        </header>
-        <main className="p-4">
-          <p className="text-muted-foreground">Authenticated. Graph API client will be added in Plan 01-02.</p>
-        </main>
-      </div>
+      <AppContent />
     </AuthGuard>
   );
 }
