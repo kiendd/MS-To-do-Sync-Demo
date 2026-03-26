@@ -51,6 +51,10 @@ export async function graphFetch<T>(
       throw new Error("Unauthorized — token may be invalid or expired");
     }
 
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
     if (response.ok) {
       return response.json() as Promise<T>;
     }

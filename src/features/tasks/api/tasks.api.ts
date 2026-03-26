@@ -45,3 +45,41 @@ export async function fetchTasksDelta(
 
   return { tasks: allTasks, deltaLink: finalDeltaLink, removedIds };
 }
+
+/**
+ * Create a new task in a list.
+ * POST /me/todo/lists/{listId}/tasks
+ * Body: { title, status: "notStarted" }
+ * Returns the full server-created TodoTask (with real id).
+ */
+export async function createTask(
+  getToken: () => Promise<string>,
+  listId: string,
+  title: string
+): Promise<TodoTask> {
+  return graphFetch<TodoTask>(
+    `/me/todo/lists/${listId}/tasks`,
+    getToken,
+    {
+      method: "POST",
+      body: { title, status: "notStarted" },
+    }
+  );
+}
+
+/**
+ * Delete a task from a list.
+ * DELETE /me/todo/lists/{listId}/tasks/{taskId}
+ * Returns void (204 No Content).
+ */
+export async function deleteTask(
+  getToken: () => Promise<string>,
+  listId: string,
+  taskId: string
+): Promise<void> {
+  await graphFetch<void>(
+    `/me/todo/lists/${listId}/tasks/${taskId}`,
+    getToken,
+    { method: "DELETE" }
+  );
+}
