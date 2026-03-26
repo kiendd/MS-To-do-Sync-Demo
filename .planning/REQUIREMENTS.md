@@ -100,10 +100,10 @@
 |-------------|-------|--------|
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Pending |
-| LIST-01 | Phase 2 | Pending |
-| LIST-02 | Phase 2 | Pending |
+| LIST-01 | Phase 2 | Complete |
+| LIST-02 | Phase 2 | Complete |
 | TASK-01 | Phase 2 | Pending |
-| SYNC-01 | Phase 2 | Pending |
+| SYNC-01 | Phase 2 | Complete |
 | SYNC-03 | Phase 2 | Pending |
 | UI-02 | Phase 2 | Pending |
 | TASK-02 | Phase 3 | Pending |

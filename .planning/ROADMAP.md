@@ -54,7 +54,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TanStack Query + Zustand setup + task list delta sync — Install and configure TanStack Query `QueryClient`, create Zustand sync store (`deltaLinks`, `lastSyncedAt`, `syncStatus` persisted to localStorage), implement `useTaskLists` query with `GET /me/todo/lists/delta`, render list sidebar, detect `wellknownListName: "flaggedEmails"` and cache list ID
+- [x] 02-01: TanStack Query + Zustand setup + task list delta sync — Install and configure TanStack Query `QueryClient`, create Zustand sync store (`deltaLinks`, `lastSyncedAt`, `syncStatus` persisted to localStorage), implement `useTaskLists` query with `GET /me/todo/lists/delta`, render list sidebar, detect `wellknownListName: "flaggedEmails"` and cache list ID
 - [ ] 02-02: Task delta sync loop + sync status UI — Implement `useTasks` query with `GET /me/todo/lists/{id}/tasks/delta` (full initial sync + `@odata.nextLink` pagination + `deltaLink` storage), configure `refetchInterval: 30_000` and `refetchIntervalInBackground: false`, handle `410 Gone` with full re-sync, build sync status indicator component showing last-synced time and sync state
 **UI hint**: yes
 
@@ -107,6 +107,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/2 | In Progress|  |
-| 2. Core Data Layer | 0/2 | Not started | - |
+| 2. Core Data Layer | 1/2 | In Progress|  |
 | 3. Write Operations | 0/2 | Not started | - |
 | 4. Polish and Two-Way Sync | 0/2 | Not started | - |

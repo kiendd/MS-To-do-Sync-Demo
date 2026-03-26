@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-foundation-01-PLAN.md
-last_updated: "2026-03-26T09:22:05.480Z"
+stopped_at: Completed 02-core-data-layer-01-PLAN.md
+last_updated: "2026-03-26T09:50:59.025Z"
 last_activity: 2026-03-26
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 6
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -21,11 +21,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-26)
 
 **Core value:** Two-way sync that works correctly — changes in the app or MS To-do reflect in both places within 30 seconds
-**Current focus:** Phase 01 — foundation
+**Current focus:** Phase 02 — core-data-layer
 
 ## Current Position
 
-Phase: 01 (foundation) — EXECUTING
+Phase: 02 (core-data-layer) — EXECUTING
 Plan: 2 of 2
 Status: Ready to execute
 Last activity: 2026-03-26
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 6 | 2 tasks | 9 files |
+| Phase 02-core-data-layer P01 | 8 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: Tailwind v4 with @tailwindcss/vite plugin — shadcn@4 requires v4, postcss.config.js not needed
 - [Phase 01-foundation]: Path alias @/* in root tsconfig.json — shadcn CLI reads root tsconfig for alias detection
 - [Phase 01-foundation]: shadcn components in src/shared/ not src/components/ — matches feature-collocated structure
+- [Phase 02-core-data-layer]: graphFetch (not graphFetchAll) used in delta API — deltaLink only appears on last page; explicit loop required
+- [Phase 02-core-data-layer]: useSyncStore.getState() in queryFn — Zustand pattern for accessing store outside React component tree
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26T09:22:05.478Z
-Stopped at: Completed 01-foundation-01-PLAN.md
+Last session: 2026-03-26T09:50:59.021Z
+Stopped at: Completed 02-core-data-layer-01-PLAN.md
 Resume file: None
