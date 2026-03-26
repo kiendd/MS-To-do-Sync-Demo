@@ -106,9 +106,9 @@
 | SYNC-01 | Phase 2 | Complete |
 | SYNC-03 | Phase 2 | Complete |
 | UI-02 | Phase 2 | Complete |
-| TASK-02 | Phase 3 | Pending |
+| TASK-02 | Phase 3 | Complete |
 | TASK-03 | Phase 3 | Pending |
-| TASK-04 | Phase 3 | Pending |
+| TASK-04 | Phase 3 | Complete |
 | TASK-05 | Phase 3 | Pending |
 | SYNC-04 | Phase 3 | Pending |
 | SYNC-02 | Phase 4 | Pending |
