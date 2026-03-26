@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation** - Azure App Registration + MSAL v5 auth + Vite/React/TS scaffold + one successful Graph API call
 - [ ] **Phase 2: Core Data Layer** - Task lists and tasks read via delta sync, flaggedEmails list detection, TanStack Query + Zustand setup, 30-second polling
-- [ ] **Phase 3: Write Operations** - CRUD tasks with optimistic updates and rollback, full mutation layer
+- [x] **Phase 3: Write Operations** - CRUD tasks with optimistic updates and rollback, full mutation layer (completed 2026-03-26)
 - [ ] **Phase 4: Polish and Two-Way Sync** - End-to-end two-way sync validation, responsive UI with shadcn/ui, UX hardening
 
 ---
@@ -74,7 +74,7 @@ Plans:
 
 Plans:
 - [x] 03-01: Create and delete task mutations — Implement `useCreateTask` (`POST`) with `tmp-{uuid}` optimistic ID and deduplication on server response, implement `useDeleteTask` (`DELETE`) with optimistic removal and rollback, wire up AddTaskForm component and delete action in task list
-- [ ] 03-02: Edit, complete, and conflict guard — Implement `useUpdateTask` (`PATCH`) and `useCompleteTask` (status toggle via PATCH), build task edit UI (inline or modal), add `toGraphDateTime()` helper for any date fields, implement `lastModifiedDateTime` conflict guard in delta merge to prevent server update from overwriting a locally pending edit, add toast notification system for write failures
+- [x] 03-02: Edit, complete, and conflict guard — Implement `useUpdateTask` (`PATCH`) and `useCompleteTask` (status toggle via PATCH), build task edit UI (inline or modal), add `toGraphDateTime()` helper for any date fields, implement `lastModifiedDateTime` conflict guard in delta merge to prevent server update from overwriting a locally pending edit, add toast notification system for write failures
 **UI hint**: yes
 
 ---
@@ -108,5 +108,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/2 | In Progress|  |
 | 2. Core Data Layer | 1/2 | In Progress|  |
-| 3. Write Operations | 1/2 | In Progress|  |
+| 3. Write Operations | 2/2 | Complete   | 2026-03-26 |
 | 4. Polish and Two-Way Sync | 0/2 | Not started | - |

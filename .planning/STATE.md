@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 03-write-operations-01-PLAN.md
-last_updated: "2026-03-26T10:14:40.391Z"
+status: verifying
+stopped_at: Completed 03-write-operations-02-PLAN.md
+last_updated: "2026-03-26T10:22:47.616Z"
 last_activity: 2026-03-26
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-03-26)
 
 Phase: 03 (write-operations) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-03-26
 
 Progress: [░░░░░░░░░░] 0%
@@ -56,6 +56,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-core-data-layer P01 | 8 | 2 tasks | 12 files |
 | Phase 02-core-data-layer P02 | 6 | 2 tasks | 8 files |
 | Phase 03-write-operations P01 | 8 | 2 tasks | 8 files |
+| Phase 03-write-operations P02 | 7 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Recent decisions affecting current work:
 - [Phase 02-core-data-layer]: removedIds separated in fetchTasksDelta for cleaner hook interface
 - [Phase 03-write-operations]: 204 No Content handled in graphFetch — single fix location, all DELETE callers benefit
 - [Phase 03-write-operations]: Optimistic mutations with tmp-uuid IDs replaced by real server IDs on POST success — prevents delta sync duplicates
+- [Phase 03-write-operations]: pendingMutations excluded from Zustand partialize — transient in-memory state resets on page load
+- [Phase 03-write-operations]: Conflict guard in both delta tasks loop AND removedIds loop — prevents server deletes from removing tasks with pending mutations
+- [Phase 03-write-operations]: useCompleteTask wraps useUpdateTask — no duplicate mutation tracking logic
 
 ### Pending Todos
 
@@ -89,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26T10:14:40.387Z
-Stopped at: Completed 03-write-operations-01-PLAN.md
+Last session: 2026-03-26T10:22:47.613Z
+Stopped at: Completed 03-write-operations-02-PLAN.md
 Resume file: None
