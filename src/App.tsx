@@ -1,5 +1,7 @@
 import { AuthGuard, LoginButton } from "./features/auth";
 import { TaskListSidebar } from "./features/task-lists";
+import { TaskList } from "./features/tasks";
+import { SyncStatusBar } from "./features/sync";
 import { useSyncStore } from "./stores/sync.store";
 
 function AppContent() {
@@ -13,16 +15,17 @@ function AppContent() {
       </header>
       <div className="flex flex-1 overflow-hidden">
         <TaskListSidebar />
-        <main className="flex-1 p-4 overflow-auto">
+        <main className="flex-1 overflow-auto">
           {selectedListId ? (
-            <p className="text-muted-foreground">
-              Tasks for list {selectedListId} will be displayed here (Plan 02-02).
-            </p>
+            <TaskList listId={selectedListId} />
           ) : (
-            <p className="text-muted-foreground">Select a list to view tasks.</p>
+            <div className="flex items-center justify-center h-full">
+              <p className="text-muted-foreground">Select a list to view tasks</p>
+            </div>
           )}
         </main>
       </div>
+      <SyncStatusBar />
     </div>
   );
 }
