@@ -1,0 +1,102 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import type { TodoTask } from "@microsoft/microsoft-graph-types";
+import { useGraphToken } from "../../auth";
+import { useSyncStore } from "../../../stores/sync.store";
+import { fetchTasksDelta } from "../api/tasks.api";
+
+export function useTasks(listId: string | null) {
+  const { getToken } = useGraphToken();
+  const queryClient = useQueryClient();
+
+  return useQuery({
+    queryKey: ["tasks", listId],
+    queryFn: async (): Promise<TodoTask[]> => {
+      if (!listId) return [];
+
+      const store = useSyncStore.getState();
+      const existingDeltaLink = store.tasksDeltaLinks[listId] ?? null;
+
+      store.setSyncStatus("syncing");
+
+      try {
+        const { tasks, deltaLink, removedIds } = await fetchTasksDelta(
+          getToken,
+          listId,
+          existingDeltaLink
+        );
+
+        // Get existing cache for merge
+        const existingTasks =
+          queryClient.getQueryData<TodoTask[]>(["tasks", listId]) ?? [];
+
+        let mergedTasks: TodoTask[];
+
+        if (existingDeltaLink === null) {
+          // Initial sync — full replacement
+          mergedTasks = tasks;
+        } else {
+          // Incremental sync — merge delta changes into existing cache
+          // CRITICAL: Delta returns PARTIAL objects for updates.
+          // Must shallow-merge into existing, not replace.
+          const taskMap = new Map(
+            existingTasks.map((t) => [t.id, t])
+          );
+
+          // Remove deleted tasks
+          for (const id of removedIds) {
+            taskMap.delete(id);
+          }
+
+          // Add new / merge updated tasks
+          for (const task of tasks) {
+            const existing = taskMap.get(task.id);
+            if (existing) {
+              // Shallow merge — keep existing fields, overwrite changed fields
+              taskMap.set(task.id, { ...existing, ...task });
+            } else {
+              taskMap.set(task.id, task);
+            }
+          }
+
+          mergedTasks = Array.from(taskMap.values());
+        }
+
+        // Save the deltaLink for this list (per SYNC-01: store full opaque URL)
+        if (deltaLink) {
+          store.setTasksDeltaLink(listId, deltaLink);
+        }
+
+        store.setSyncStatus("idle");
+        store.setLastSyncedAt(Date.now());
+        return mergedTasks;
+      } catch (error: any) {
+        // Handle 410 Gone (per SYNC-03)
+        if (
+          error?.message?.includes("410") ||
+          error?.code === "GoneError"
+        ) {
+          store.clearTasksDeltaLink(listId);
+          store.setSyncStatus("resyncing");
+
+          // Retry with no deltaLink (full re-sync)
+          const { tasks, deltaLink: newDeltaLink } =
+            await fetchTasksDelta(getToken, listId, null);
+
+          if (newDeltaLink) {
+            store.setTasksDeltaLink(listId, newDeltaLink);
+          }
+
+          store.setSyncStatus("idle");
+          store.setLastSyncedAt(Date.now());
+          return tasks;
+        }
+
+        store.setSyncStatus("error");
+        throw error;
+      }
+    },
+    enabled: !!listId && !!getToken,
+    refetchInterval: 30_000,                   // Per SYNC-01: poll every 30 seconds
+    refetchIntervalInBackground: false,         // Per SYNC-01: pause when tab hidden
+  });
+}
