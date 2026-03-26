@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: Azure App Registration + MSAL v5 scaffold — Register the Azure app as SPA type, scaffold Vite + React + TypeScript project, configure `MsalProvider` with correct scopes (`Tasks.ReadWrite openid offline_access`), implement `loginPopup` / `logoutPopup` flow and `AuthGuard`
+- [x] 01-01: Azure App Registration + MSAL v5 scaffold — Register the Azure app as SPA type, scaffold Vite + React + TypeScript project, configure `MsalProvider` with correct scopes (`Tasks.ReadWrite openid offline_access`), implement `loginPopup` / `logoutPopup` flow and `AuthGuard`
 - [ ] 01-02: Graph API client + token validation — Build the typed Graph API client wrapper (`acquireTokenSilent` + popup fallback, `429 Retry-After` handling, `@odata.nextLink` pagination loop), make a successful `GET /me/todo/lists` call, display account name to confirm auth is end-to-end working
 **UI hint**: yes
 
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Not started | - |
+| 1. Foundation | 1/2 | In Progress|  |
 | 2. Core Data Layer | 0/2 | Not started | - |
 | 3. Write Operations | 0/2 | Not started | - |
 | 4. Polish and Two-Way Sync | 0/2 | Not started | - |

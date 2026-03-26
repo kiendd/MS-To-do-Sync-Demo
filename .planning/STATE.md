@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Requirements and roadmap written; ready to begin Phase 1 planning
-last_updated: "2026-03-26T09:13:40.318Z"
-last_activity: 2026-03-26 -- Phase 01 execution started
+stopped_at: Completed 01-foundation-01-PLAN.md
+last_updated: "2026-03-26T09:22:05.480Z"
+last_activity: 2026-03-26
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 6
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-26)
 ## Current Position
 
 Phase: 01 (foundation) — EXECUTING
-Plan: 1 of 2
-Status: Executing Phase 01
-Last activity: 2026-03-26 -- Phase 01 execution started
+Plan: 2 of 2
+Status: Ready to execute
+Last activity: 2026-03-26
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01-foundation P01 | 6 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -64,6 +65,9 @@ Recent decisions affecting current work:
 - Init: Azure App Registration must use "Single-page application" platform type (not "Web") — wrong type causes CORS errors at token endpoint
 - Init: Request `offline_access` scope at login time — cannot be added to an existing session without re-login
 - Init: Delta query polling (30s) over webhooks — webhooks require a public HTTPS backend endpoint
+- [Phase 01-foundation]: Tailwind v4 with @tailwindcss/vite plugin — shadcn@4 requires v4, postcss.config.js not needed
+- [Phase 01-foundation]: Path alias @/* in root tsconfig.json — shadcn CLI reads root tsconfig for alias detection
+- [Phase 01-foundation]: shadcn components in src/shared/ not src/components/ — matches feature-collocated structure
 
 ### Pending Todos
 
@@ -77,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-26
-Stopped at: Requirements and roadmap written; ready to begin Phase 1 planning
+Last session: 2026-03-26T09:22:05.478Z
+Stopped at: Completed 01-foundation-01-PLAN.md
 Resume file: None
