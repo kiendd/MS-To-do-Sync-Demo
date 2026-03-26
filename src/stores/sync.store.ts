@@ -16,6 +16,11 @@ interface SyncStore {
   // Flagged emails list
   flaggedEmailsListId: string | null;
 
+  // Pending mutations (conflict guard per SYNC-04)
+  pendingMutations: Set<string>; // Set of task IDs with in-flight mutations
+  addPendingMutation: (taskId: string) => void;
+  removePendingMutation: (taskId: string) => void;
+
   // Actions
   setListsDeltaLink: (link: string | null) => void;
   setTasksDeltaLink: (listId: string, link: string | null) => void;
@@ -36,6 +41,19 @@ export const useSyncStore = create<SyncStore>()(
       syncStatus: "idle",
       selectedListId: null,
       flaggedEmailsListId: null,
+
+      // Transient in-memory state -- NOT persisted (excluded from partialize)
+      pendingMutations: new Set<string>(),
+      addPendingMutation: (taskId) =>
+        set((state) => ({
+          pendingMutations: new Set(state.pendingMutations).add(taskId),
+        })),
+      removePendingMutation: (taskId) =>
+        set((state) => {
+          const next = new Set(state.pendingMutations);
+          next.delete(taskId);
+          return { pendingMutations: next };
+        }),
 
       setListsDeltaLink: (link) => set({ listsDeltaLink: link }),
       setTasksDeltaLink: (listId, link) =>

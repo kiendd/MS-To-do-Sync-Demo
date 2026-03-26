@@ -83,3 +83,29 @@ export async function deleteTask(
     { method: "DELETE" }
   );
 }
+
+/**
+ * Update a task via PATCH.
+ * PATCH /me/todo/lists/{listId}/tasks/{taskId}
+ * Body: partial TodoTask fields (only changed fields).
+ * Returns the full updated TodoTask from the server.
+ *
+ * IMPORTANT: Date fields (dueDateTime, completedDateTime, etc.) MUST use
+ * the dateTimeTimeZone object format { dateTime, timeZone }, NOT plain ISO strings.
+ * Use toGraphDateTime() from src/lib/graph-utils.ts for any date values.
+ */
+export async function updateTask(
+  getToken: () => Promise<string>,
+  listId: string,
+  taskId: string,
+  patch: Partial<TodoTask>
+): Promise<TodoTask> {
+  return graphFetch<TodoTask>(
+    `/me/todo/lists/${listId}/tasks/${taskId}`,
+    getToken,
+    {
+      method: "PATCH",
+      body: patch,
+    }
+  );
+}
