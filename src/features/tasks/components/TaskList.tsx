@@ -1,5 +1,7 @@
 import { useTasks } from "../hooks/useTasks";
 import { useDeleteTask } from "../hooks/useDeleteTask";
+import { useUpdateTask } from "../hooks/useUpdateTask";
+import { useCompleteTask } from "../hooks/useCompleteTask";
 import { TaskItem } from "./TaskItem";
 import { AddTaskForm } from "./AddTaskForm";
 import { useSyncStore } from "../../../stores/sync.store";
@@ -11,6 +13,8 @@ interface TaskListProps {
 export function TaskList({ listId }: TaskListProps) {
   const { data: tasks, isLoading, error } = useTasks(listId);
   const deleteMutation = useDeleteTask(listId);
+  const updateMutation = useUpdateTask(listId);
+  const { toggleComplete } = useCompleteTask(listId);
   const flaggedEmailsListId = useSyncStore((s) => s.flaggedEmailsListId);
   const isFromFlaggedEmails = listId === flaggedEmailsListId;
 
@@ -54,6 +58,8 @@ export function TaskList({ listId }: TaskListProps) {
                 task={task}
                 isFromFlaggedEmails={isFromFlaggedEmails}
                 onDelete={(taskId) => deleteMutation.mutate(taskId)}
+                onToggleComplete={toggleComplete}
+                onUpdate={(taskId, patch) => updateMutation.mutate({ taskId, patch })}
               />
             ))}
           </div>

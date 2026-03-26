@@ -42,13 +42,25 @@ export function useTasks(listId: string | null) {
             existingTasks.map((t) => [t.id, t])
           );
 
+          // Read conflict guard set once (SYNC-04)
+          const pendingMutations = useSyncStore.getState().pendingMutations;
+
           // Remove deleted tasks
           for (const id of removedIds) {
-            taskMap.delete(id);
+            // Don't remove a task that has a pending mutation (e.g., user is editing a task
+            // that was deleted on another client -- the mutation will fail and handle it)
+            if (!pendingMutations.has(id)) {
+              taskMap.delete(id);
+            }
           }
 
           // Add new / merge updated tasks
           for (const task of tasks) {
+            // CONFLICT GUARD (SYNC-04): skip server update for tasks with pending local mutations.
+            // The locally optimistic state is authoritative until onSettled removes from pendingMutations.
+            if (task.id && pendingMutations.has(task.id)) {
+              continue;
+            }
             const existing = taskMap.get(task.id);
             if (existing) {
               // Shallow merge — keep existing fields, overwrite changed fields

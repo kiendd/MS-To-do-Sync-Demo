@@ -3,6 +3,7 @@ import { TaskListSidebar } from "./features/task-lists";
 import { TaskList } from "./features/tasks";
 import { SyncStatusBar } from "./features/sync";
 import { useSyncStore } from "./stores/sync.store";
+import { Toaster } from "sonner";
 
 function AppContent() {
   const selectedListId = useSyncStore((s) => s.selectedListId);
@@ -26,6 +27,7 @@ function AppContent() {
         </main>
       </div>
       <SyncStatusBar />
+      <Toaster position="bottom-right" richColors closeButton />
     </div>
   );
 }
