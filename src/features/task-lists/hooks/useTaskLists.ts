@@ -15,19 +15,26 @@ export function useTaskLists() {
       store.setSyncStatus("syncing");
 
       try {
+        // If we have a stored deltaLink but the TanStack Query cache is empty
+        // (e.g. page reload), the in-memory cache is gone — fall back to full sync
+        // so we don't merge an incremental delta into an empty list.
+        const existingLists =
+          queryClient.getQueryData<TodoTaskList[]>(["taskLists"]) ?? [];
+        const effectiveDeltaLink =
+          store.listsDeltaLink && existingLists.length === 0
+            ? null
+            : store.listsDeltaLink;
+
         const { lists, deltaLink } = await fetchTaskListsDelta(
           getToken,
-          store.listsDeltaLink
+          effectiveDeltaLink
         );
 
         // On initial sync (no prior deltaLink), replace the full cache.
         // On incremental sync (had a deltaLink), merge changes into existing cache.
-        const existingLists =
-          queryClient.getQueryData<TodoTaskList[]>(["taskLists"]) ?? [];
-
         let mergedLists: TodoTaskList[];
 
-        if (store.listsDeltaLink === null) {
+        if (effectiveDeltaLink === null) {
           // Initial sync — use full result
           mergedLists = lists;
         } else {
@@ -68,8 +75,14 @@ export function useTaskLists() {
         store.setLastSyncedAt(Date.now());
         return mergedLists;
       } catch (error: any) {
-        // Handle 410 Gone (per SYNC-03) — clear deltaLink, restart full sync
-        if (error?.message?.includes("410") || error?.code === "GoneError") {
+        // Handle 410 Gone (per SYNC-03) and 404 Item Not Found (stale delta link
+        // from a different account/session) — clear deltaLink, restart full sync
+        if (
+          error?.message?.includes("410") ||
+          error?.code === "GoneError" ||
+          error?.message?.includes("404") ||
+          error?.message === "Item not found"
+        ) {
           store.setListsDeltaLink(null);
           store.setSyncStatus("resyncing");
           // Retry with no deltaLink (full sync)

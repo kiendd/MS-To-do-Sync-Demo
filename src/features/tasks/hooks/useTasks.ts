@@ -14,20 +14,25 @@ export function useTasks(listId: string | null) {
       if (!listId) return [];
 
       const store = useSyncStore.getState();
-      const existingDeltaLink = store.tasksDeltaLinks[listId] ?? null;
 
       store.setSyncStatus("syncing");
 
       try {
+        // Get existing cache for merge
+        const existingTasks =
+          queryClient.getQueryData<TodoTask[]>(["tasks", listId]) ?? [];
+
+        // If we have a stored deltaLink but TanStack Query cache is empty (e.g. page
+        // reload), fall back to full sync so we don't merge incremental into nothing.
+        const storedDeltaLink = store.tasksDeltaLinks[listId] ?? null;
+        const existingDeltaLink =
+          storedDeltaLink && existingTasks.length === 0 ? null : storedDeltaLink;
+
         const { tasks, deltaLink, removedIds } = await fetchTasksDelta(
           getToken,
           listId,
           existingDeltaLink
         );
-
-        // Get existing cache for merge
-        const existingTasks =
-          queryClient.getQueryData<TodoTask[]>(["tasks", listId]) ?? [];
 
         let mergedTasks: TodoTask[];
 
@@ -82,10 +87,13 @@ export function useTasks(listId: string | null) {
         store.setLastSyncedAt(Date.now());
         return mergedTasks;
       } catch (error: any) {
-        // Handle 410 Gone (per SYNC-03)
+        // Handle 410 Gone (per SYNC-03) and 404 Item Not Found (stale delta link
+        // from a different account/session) — clear deltaLink, restart full sync
         if (
           error?.message?.includes("410") ||
-          error?.code === "GoneError"
+          error?.code === "GoneError" ||
+          error?.message?.includes("404") ||
+          error?.message === "Item not found"
         ) {
           store.clearTasksDeltaLink(listId);
           store.setSyncStatus("resyncing");

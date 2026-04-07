@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
 import { cn } from "../../../shared/lib/utils";
-import { Circle, CheckCircle2, Star, Mail, Trash2 } from "lucide-react";
+import { Circle, CheckCircle2, Star, Mail, Trash2, Code2 } from "lucide-react";
+import { TaskDetailDialog } from "./TaskDetailDialog";
 
 interface TaskItemProps {
   task: TodoTask;
@@ -21,6 +22,7 @@ export function TaskItem({
   const isCompleted = task.status === "completed";
   const isImportant = task.importance === "high";
   const [isEditing, setIsEditing] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title ?? "");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -128,6 +130,14 @@ export function TaskItem({
         >
           <Star className={cn("h-4 w-4", isImportant && "fill-amber-500")} />
         </button>
+        {/* Detail button -- visible on hover */}
+        <button
+          onClick={() => setShowDetail(true)}
+          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted text-muted-foreground"
+          aria-label="View raw task data"
+        >
+          <Code2 className="h-4 w-4" />
+        </button>
         {/* Delete button -- visible on hover */}
         {onDelete && task.id && (
           <button
@@ -139,6 +149,10 @@ export function TaskItem({
           </button>
         )}
       </div>
+
+      {showDetail && (
+        <TaskDetailDialog task={task} onClose={() => setShowDetail(false)} />
+      )}
     </div>
   );
 }
